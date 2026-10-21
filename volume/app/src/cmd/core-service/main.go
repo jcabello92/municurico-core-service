@@ -28,10 +28,11 @@ func main() {
 	cfg := config.LoadEnv()
 	log.Printf("Iniciando servicio en modo: %s", cfg.AppEnv)
 
-	// 1. Conexión y migraciones en PostgreSQL
+	// 1. Conexión, migraciones y seeders en PostgreSQL
 	psqlDSN := dbPostgres.BuildPostgreSQLDSN(cfg.PSQLHost, cfg.PSQLPort, cfg.PSQLUser, cfg.PSQLPassword, cfg.PSQLDB)
 	db := dbPostgres.ConnectPostgreSQL(cfg.PSQLDB, psqlDSN)
 	dbPostgres.RunMigrations(db)
+	dbPostgres.RunSeeders(db)
 
 	// 2. Conexión a Redis
 	redisDSN := dbRedis.BuildRedisDSN(cfg.RedisHost, cfg.RedisPort)
